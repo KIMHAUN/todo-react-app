@@ -10,10 +10,9 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      items: [
-        //{id: "0", title: "Hello World 1", done: true },
-        //{id: "1", title: "Hello World 2", done: false },
-      ],
+      items: [],
+      //로딩중이라는 상태를 표현할 변수. 생성자에 상태 변수를 추가한다.
+      loading: true,
     };
   }
 
@@ -78,9 +77,9 @@ class App extends React.Component {
       </AppBar>
     );
 
-    // props로 넘겨주기.
-    return (
-      <div className="App">
+    /* 로딩중이 아닐 때 렌더링 할 부분*/
+    var todoListPage = (
+      <div>
         {navigationBar} {/* 네비게이션 바 렌더링 */}
         <Container maxWidth="md">
           <AddTodo add={this.add}/>
@@ -88,6 +87,17 @@ class App extends React.Component {
         </Container>
       </div>
     );
+
+    /* 로딩중 렌더링 할 부분*/
+    var loadingPage = <h1>로딩중..</h1>;
+    var content = loadingPage;
+
+    if (!this.state.loading) {
+      //로딩중이 아니라면 todoListPage 선택
+      content = todoListPage;
+    }
+    // props로 넘겨주기.
+    return <div className="App">{content}</div>;
   }
 }
 export default App;
