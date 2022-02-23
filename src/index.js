@@ -1,12 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App'; // App 컴포넌트 import
+import AppRouter from './AppRouter'; // App 컴포넌트 import
 import reportWebVitals from './reportWebVitals';
 
 ReactDOM.render( //React DOM이 내부의 컴포넌트들을 'root' 엘리멘트에 render함.
   <React.StrictMode>
-    <App />
+    <AppRouter />
   </React.StrictMode>,
   document.getElementById('root')
 );

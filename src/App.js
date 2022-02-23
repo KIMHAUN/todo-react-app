@@ -17,56 +17,44 @@ class App extends React.Component {
     };
   }
 
-  // (1) 함수 추가
-  add = (item) => {
-    const thisItems = this.state.items;
-    item.id = "ID-" + thisItems.length; //key를 위한 id 추가
-    item.done = false; //done 초기화
-    thisItems.push(item);
-    this.setState({ item: thisItems });
-    console.log("items : ", this.state.items);
+  componentDidMount() {
+    call("/todo", "GET", null).then((response) =>
+      this.setState({ items: response.data})
+    );
   }
+
+  add = (item) => {
+    call("/todo", "POST", item).then((response) =>
+      this.setState({ items: response.data})
+    );
+  };
+
+  update = (item) => {
+    call("/todo", "PUT", item).then((response) =>
+      this.setState({ items: response.data})
+    );
+  };
 
   //삭제
   delete = (item) => {
-    const thisItems = this.state.items;
-    console.log("Before Update Items : ", this.state.items)
-    const newItems = thisItems.filter(e => e.id !== item.id);
-    this.setState({ items: newItems }, () => {
-      //debugging callback
-      console.log("Update Items : ", this.state.items)
-    });
-  }
+    call("/todo", "DELETE", item).then((response) =>
+      this.setState({ items: response.data})
+    );
+  };
 
-  componentDidMount() {
-    // 메서드를 명시하고 싶은 경우나 헤더와 바디를 함께 보내야 할 경우 fetch의 두 번째 매개변수에 요청에 대한 정보가 담긴 오브젝트를 정의
-    const requestOptions = {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-    };
-    fetch("http://localhost:8080/todo", requestOptions)
-      .then((response) => response.json())
-      .then(
-        (response) => {
-          //response 수신 시 하고 싶은 작업
-          this.setState({
-            items: response.data,
-          });
-        },
-        (error) => {
-          this.setState({
-            error,
-          });
-        }
-      );
-  }
+
 
   render() {
     var todoItems = this.state.items.length > 0 && (
       <Paper style={{ margin : 16 }}>
         <List>
           {this.state.items.map((item, idx) => (
-            <Todo item={item} key={item.id} delete={this.delete} />
+            <Todo
+              item={item}
+              key={item.id}
+              delete={this.delete}
+              update={this.update}
+            />
           ))}
         </List>
       </Paper>
